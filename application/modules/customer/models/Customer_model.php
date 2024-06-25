@@ -20,5 +20,20 @@ class Customer_model extends CI_Model
         ->get()
         ->result_array());
     }
+
+    public function get_user($params){
+        return ($this->db->select('users.*')
+        ->from('users')
+        ->where('users.id', $params)
+        ->get()
+        ->row_array());
+    }
+
+    public function get_all_users(){
+        return ($this->db->select('users.*')
+        ->from('users')
+        ->get()
+        ->result_array());
+    }
     
 }

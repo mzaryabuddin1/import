@@ -21,20 +21,25 @@ include_once('common/sidebar.php');
 				</div>
 			</div>
 		</div>
+
+		<div class="row mb-3">
+			<div class="col-12 text-end">
+				<a class="btn btn-primary">Add New</a>
+			</div>
+		</div>
+
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="card">
 					<div class="card-header">
-						<h4 class="card-title">Default Datatable</h4>
-						<p class="card-text">
-							This is the most basic example of the datatables with zero configuration. Use the <code>.datatable</code> class to initialize datatables.
-						</p>
+						<h4 class="card-title">Datatable</h4>
 					</div>
 					<div class="card-body">
 						<div class="table-responsive">
 							<table class="table  datanew ">
 								<thead>
 									<tr>
+										<th>Avatar</th>
 										<th>Username</th>
 										<th>Email</th>
 										<th>Address</th>
@@ -44,15 +49,23 @@ include_once('common/sidebar.php');
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										<td>Tiger Nixon</td>
-										<td>System Architect</td>
-										<td>Edinburgh</td>
-										<td>61</td>
-										<td>2011/04/25</td>
-										<td>2011/04/25</td>
-									</tr>
-									
+									<?php foreach ($data as $row) : ?>
+										<tr>
+											<td><img src="<?= $row['profile_picture'] ?>" alt="profile" width="40px"></td>
+											<td><?= ucfirst($row['username']) ?></td>
+											<td><?= $row['email'] ?></td>
+											<td><?= $row['address'] ?></td>
+											<td><?= $row['phone'] ?></td>
+											<td><?= $row['status'] ? 'Active' : 'Inactive' ?></td>
+											<td>
+												<div class="btn-group" role="group" aria-label="Basic example">
+													<a type="button" href="#" class="btn btn-outline-secondary">Edit</a>
+													<button type="button" class="btn btn-danger">Delete</button>
+												</div>
+											</td>
+										</tr>
+									<?php endforeach; ?>
+
 								</tbody>
 							</table>
 						</div>
@@ -69,5 +82,5 @@ include_once('common/sidebar.php');
 include_once('common/footer.php');
 ?>
 
-<script src="<?= base_url()?>theme/assets/js/jquery.dataTables.min.js"></script>
-<script src="<?= base_url()?>theme/assets/js/dataTables.bootstrap4.min.js"></script>
+<script src="<?= base_url() ?>theme/assets/js/jquery.dataTables.min.js"></script>
+<script src="<?= base_url() ?>theme/assets/js/dataTables.bootstrap4.min.js"></script>
