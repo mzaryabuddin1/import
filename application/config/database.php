@@ -75,7 +75,7 @@ $query_builder = TRUE;
 
 $db['default'] = array(
 	'dsn'	=> '',
-	'hostname' => 'localhost',
+	'hostname' => '138.201.162.196',
 	'username' => 'vvehirec_import',
 	'password' => '90x1%9fU)nsf',
 	'database' => 'vvehirec_import',
