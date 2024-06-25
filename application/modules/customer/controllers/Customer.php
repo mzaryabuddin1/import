@@ -36,6 +36,19 @@ class Customer extends MX_Controller
 		}	
 	}
 
+
+	public function module_auth($name, $action)
+	{
+		if($_SESSION['customer_superadmin'])
+			return true;
+
+		$user = $this->Customer_model->get_user($_SESSION['customer_id']);
+		if(!$user)
+			return false;
+
+		return true;
+	}
+
 	public function dashboard()
 	{
 		$this->checksession();
@@ -49,9 +62,12 @@ class Customer extends MX_Controller
 	public function users()
 	{
 		$this->checksession();
+		$isallowed = $this->module_auth('users', 'view');
+		if(!$isallowed)
+			header('Location: ' . base_url() . 'customer-welcome?err=You are not allowed to view');
 
-
-		$this->load->view('users_view');
+		$this->data['data'] = $this->Customer_model->get_all_users();
+		$this->load->view('users_view', $this->data);
 	}
 
 	public function login_submit()
