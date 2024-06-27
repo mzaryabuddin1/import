@@ -2,12 +2,26 @@
 	<div class="sidebar-inner slimscroll">
 		<div id="sidebar-menu" class="sidebar-menu">
 			<ul>
-				<li>
-					<a href="<?= base_url()?>customer-dashboard" class="<?= $pagetab == 'dashboard' ? 'active' : ''  ?>"><img src="<?= base_url() ?>theme/assets/img/icons/dashboard.svg" alt="img"><span> Dashboard</span> </a>
-				</li>
-				<li>
-					<a href="<?= base_url()?>customer-users" class="<?= $pagetab == 'users_accounts' ? 'active' : ''  ?>"><img src="<?= base_url() ?>theme/assets/img/icons/users1.svg" alt="img"><span>  User Accounts</span> </a>
-				</li>
+				<?php
+				$result = [];
+				foreach ($_SESSION['customer_modules'] as $module) {
+					$module_name = $module['module'];
+					$view_status = $module['view'];
+					$result[$module_name] = $view_status;
+				}
+				?>
+				<?php if ( $_SESSION['customer_superadmin'] || $result['dashboard']) : ?>
+					<li>
+						<a href="<?= base_url() ?>customer-dashboard" class="<?= $pagetab == 'dashboard' ? 'active' : ''  ?>"><img src="<?= base_url() ?>theme/assets/img/icons/dashboard.svg" alt="img"><span> Dashboard</span> </a>
+					</li>
+				<?php endif ?>
+				<?php if ( $_SESSION['customer_superadmin'] || $result['users']) : ?>
+					<li>
+						<a href="<?= base_url() ?>customer-users" class="<?= $pagetab == 'users_accounts' ? 'active' : ''  ?>"><img src="<?= base_url() ?>theme/assets/img/icons/users1.svg" alt="img"><span> User Accounts</span> </a>
+					</li>
+				<?php endif ?>
+
+
 				<!-- <li class="submenu" >
 					<a href="javascript:void(0);" class=""><img src="<?= base_url() ?>theme/assets/img/icons/product.svg" alt="img"><span> User Accounts</span> <span class="menu-arrow"></span></a>
 					<ul>

@@ -12,4 +12,6 @@ $route['customer-dashboard'] = 'customer/Customer/dashboard';
 $route['customer-users'] = 'customer/Customer/users'; 
 $route['customer-logout'] = 'customer/Customer/logout'; 
 
+
+$route['customer-add-user'] = 'customer/Customer/add_user'; 
 // ADMIN
