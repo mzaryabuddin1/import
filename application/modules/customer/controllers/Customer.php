@@ -46,19 +46,33 @@ class Customer extends MX_Controller
 		if(!$user)
 			return false;
 
+		$mods = json_decode($user['modules'], true);
+		$filtered_modules = array_filter($mods, function($module) use ($name, $action) {
+			return $module['module'] === $name && $module[$action];
+		});
+
+		if(sizeof($filtered_modules) ==0)
+			return false;
+
 		return true;
 	}
 
 	public function dashboard()
 	{
 		$this->checksession();
+		$isallowed = $this->module_auth('dashboard', 'view');
+		if(!$isallowed)
+			header('Location: ' . base_url() . 'customer-welcome?err=You are not allowed to view');
+
 		$this->load->view('dashboard_view');
 	}
+
 	public function welcome()
 	{
 		$this->checksession();
 		$this->load->view('welcome_view');
 	}
+
 	public function users()
 	{
 		$this->checksession();
@@ -68,6 +82,16 @@ class Customer extends MX_Controller
 
 		$this->data['data'] = $this->Customer_model->get_all_users();
 		$this->load->view('users_view', $this->data);
+	}
+
+	public function add_user()
+	{
+		$this->checksession();
+		$isallowed = $this->module_auth('users', 'insert');
+		if(!$isallowed)
+			header('Location: ' . base_url() . 'customer-welcome?err=You are not allowed to view');
+
+		$this->load->view('add_users_view', $this->data);
 	}
 
 	public function login_submit()
@@ -104,6 +128,7 @@ class Customer extends MX_Controller
 			$_SESSION['customer_username'] = $isAvailable[0]['username'];
 			$_SESSION['customer_superadmin'] = $isAvailable[0]['is_superadmin'];
 			$_SESSION['customer_avatar'] = $isAvailable[0]['profile_picture'];
+			$_SESSION['customer_modules'] = json_decode($isAvailable[0]['modules'], true);
 
 			$success = array('success' => 1);
 			print_r(json_encode($success));

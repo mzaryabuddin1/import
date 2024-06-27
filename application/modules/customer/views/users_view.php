@@ -4,6 +4,17 @@ $pagetab = "users_accounts";
 $pagename = "manage_users";
 
 
+$filtered_modules = array_filter($_SESSION['customer_modules'], function($module) {
+    return $module['module'] === 'users';
+});
+
+
+$view = $filtered_modules[0]['view'];
+$insert = $filtered_modules[0]['insert'];
+$update = $filtered_modules[0]['update'];
+$delete = $filtered_modules[0]['delete'];
+
+
 include_once('common/header.php');
 include_once('common/sidebar.php');
 ?>
@@ -22,11 +33,13 @@ include_once('common/sidebar.php');
 			</div>
 		</div>
 
-		<div class="row mb-3">
-			<div class="col-12 text-end">
-				<a class="btn btn-primary">Add New</a>
+		<?php if($_SESSION['customer_superadmin'] || $insert) : ?>
+			<div class="row mb-3">
+				<div class="col-12 text-end">
+					<a class="btn btn-primary" href="<?= base_url()?>customer-add-user">Add New</a>
+				</div>
 			</div>
-		</div>
+		<?php endif; ?>
 
 		<div class="row">
 			<div class="col-sm-12">
@@ -59,8 +72,12 @@ include_once('common/sidebar.php');
 											<td><?= $row['status'] ? 'Active' : 'Inactive' ?></td>
 											<td>
 												<div class="btn-group" role="group" aria-label="Basic example">
-													<a type="button" href="#" class="btn btn-outline-secondary">Edit</a>
-													<button type="button" class="btn btn-danger">Delete</button>
+													<?php if( $_SESSION['customer_superadmin'] || $update) : ?>
+														<a type="button" href="#" class="btn btn-outline-secondary">Edit</a>
+													<?php endif; ?>
+													<?php if( $_SESSION['customer_superadmin'] || $delete) : ?>
+														<button type="button" class="btn btn-danger">Delete</button>
+													<?php endif; ?>
 												</div>
 											</td>
 										</tr>
