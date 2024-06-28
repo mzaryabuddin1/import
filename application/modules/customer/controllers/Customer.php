@@ -215,6 +215,7 @@ class Customer extends MX_Controller
 		$this->data['email'] = $information['email'];
 		$this->data['phone'] = $information['phone'];
 		$this->data['address'] = $information['address'];
+		$this->data['status'] = $information['status'] ? 1 : 0;
 		$this->data['package_id'] = 1;
 		$this->data['updated_at'] = $this->__currentdatetime;
 		$this->data['updated_by'] = $_SESSION['customer_id'];
