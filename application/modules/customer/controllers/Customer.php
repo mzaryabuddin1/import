@@ -177,7 +177,7 @@ class Customer extends MX_Controller
 			header('Location: ' . base_url() . 'customer-welcome?err=You are not allowed to view');
 
 		//VALIDATE FORM
-		$this->form_validation->set_rules('id', 'Id', 'required|numeric|min[1]');
+		$this->form_validation->set_rules('id', 'Id', 'required|numeric');
 		if($this->input->post('password')){
 			$this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[5]');
 			$this->data['password'] = md5($this->input->post('password'));
@@ -220,6 +220,7 @@ class Customer extends MX_Controller
 		$this->data['updated_at'] = $this->__currentdatetime;
 		$this->data['updated_by'] = $_SESSION['customer_id'];
 
+	
 		$result = $this->Customer_model->edit_user_submit($this->data);
 
 		if($result){
@@ -234,6 +235,30 @@ class Customer extends MX_Controller
 
 
 		// $this->load->view('add_users_view', $this->data);
+	}
+
+	public function delete_user()
+	{
+		$this->checksession();
+		$isallowed = $this->module_auth('users', 'delete');
+		if(!$isallowed)
+			header('Location: ' . base_url() . 'customer-welcome?err=You are not allowed to view');
+
+		$information = $this->security->xss_clean($this->input->post());
+		$params['id'] = $information['id'];
+		$params['is_delete'] = 1;
+
+		$result = $this->Customer_model->delete_user_submit($params);
+
+		if($result){
+			$success = array('success' => 1, 'msg' => "Inserted successfully");
+			print_r(json_encode($success));
+			exit;
+		}else{
+			$errors = array('error' => '<p>Error while inserting!.</p>');
+			print_r(json_encode($errors));
+			exit;
+		}
 	}
 
 	public function login_submit()

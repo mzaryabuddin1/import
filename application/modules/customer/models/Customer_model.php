@@ -17,6 +17,7 @@ class Customer_model extends CI_Model
         ->from('users')
         ->where('users.username', $params['username'])
         ->where('users.password', $params['password'])
+        ->where('users.is_delete', 0)
         ->get()
         ->result_array());
     }
@@ -44,6 +45,11 @@ class Customer_model extends CI_Model
     }
 
     public function edit_user_submit($params) {
+        $this->db->where('id', $params['id']);
+        return $this->db->update('users', $params);
+    }
+
+    public function delete_user_submit($params) {
         $this->db->where('id', $params['id']);
         return $this->db->update('users', $params);
     }
