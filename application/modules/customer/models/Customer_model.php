@@ -42,8 +42,9 @@ class Customer_model extends CI_Model
         return ($this->db->insert('users', $params));
     }
 
-    public function edit_user_submit($params){
-        return ($this->db->update('users', $params, $params['id']));
+    public function edit_user_submit($params) {
+        $this->db->where('id', $params['id']);
+        return $this->db->update('users', $params);
     }
     
 }
