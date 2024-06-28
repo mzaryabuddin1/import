@@ -9,14 +9,16 @@ $route['translate_uri_dashes'] = FALSE;
 $route['customer-login-submit'] = 'customer/Customer/login_submit'; 
 $route['customer-welcome'] = 'customer/Customer/welcome'; 
 $route['customer-dashboard'] = 'customer/Customer/dashboard'; 
-$route['customer-users'] = 'customer/Customer/users'; 
 $route['customer-logout'] = 'customer/Customer/logout'; 
 
-
+$route['customer-users'] = 'customer/Customer/users'; 
 $route['customer-add-user'] = 'customer/Customer/add_user'; 
 $route['customer-add-user-submit'] = 'customer/Customer/add_user_submit';
 $route['customer-edit-user/(:num)'] = 'customer/Customer/edit_user/$1'; 
 $route['customer-edit-user-submit'] = 'customer/Customer/edit_user_submit'; 
 $route['customer-delete-user-submit'] = 'customer/Customer/delete_user'; 
+
+$route['customer-stock'] = 'customer/Customer/stock'; 
+$route['customer-add-stock'] = 'customer/Customer/add_stock'; 
 
 // ADMIN

@@ -144,7 +144,7 @@ class Customer extends MX_Controller
 
 		$information = $this->security->xss_clean($this->input->post());
 		$this->data['username'] = $information['username'];
-		$this->data['password'] = $information['password'];
+		$this->data['password'] = md5($information['password']);
 		$this->data['modules'] = $information['permissions'];
 		$this->data['email'] = $information['email'];
 		$this->data['phone'] = $information['phone'];
@@ -261,6 +261,18 @@ class Customer extends MX_Controller
 		}
 	}
 
+	
+	public function stock()
+	{
+		$this->checksession();
+		$isallowed = $this->module_auth('stock', 'view');
+		if(!$isallowed)
+			header('Location: ' . base_url() . 'customer-welcome?err=You are not allowed to view');
+
+		$this->data['data'] = $this->Customer_model->get_all_stock();
+		$this->load->view('users_view', $this->data);
+	}
+
 	public function login_submit()
 	{
 		//VALIDATE FORM
@@ -306,6 +318,7 @@ class Customer extends MX_Controller
 			exit;
 		}
 	}
+	
 
 	public function logout()
 	{
