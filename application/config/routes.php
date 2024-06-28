@@ -17,5 +17,6 @@ $route['customer-add-user'] = 'customer/Customer/add_user';
 $route['customer-add-user-submit'] = 'customer/Customer/add_user_submit';
 $route['customer-edit-user/(:num)'] = 'customer/Customer/edit_user/$1'; 
 $route['customer-edit-user-submit'] = 'customer/Customer/edit_user_submit'; 
+$route['customer-delete-user-submit'] = 'customer/Customer/delete_user'; 
 
 // ADMIN

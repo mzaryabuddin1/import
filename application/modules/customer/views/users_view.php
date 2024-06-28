@@ -4,8 +4,8 @@ $pagetab = "users_accounts";
 $pagename = "manage_users";
 
 
-$filtered_modules = array_filter($_SESSION['customer_modules'], function($module) {
-    return $module['module'] === 'users';
+$filtered_modules = array_filter($_SESSION['customer_modules'], function ($module) {
+	return $module['module'] === 'users';
 });
 
 $filtered_modules = array_values($filtered_modules);
@@ -35,10 +35,10 @@ include_once('common/sidebar.php');
 			</div>
 		</div>
 
-		<?php if($_SESSION['customer_superadmin'] || $insert) : ?>
+		<?php if ($_SESSION['customer_superadmin'] || $insert) : ?>
 			<div class="row mb-3">
 				<div class="col-12 text-end">
-					<a class="btn btn-primary" href="<?= base_url()?>customer-add-user">Add New</a>
+					<a class="btn btn-primary" href="<?= base_url() ?>customer-add-user">Add New</a>
 				</div>
 			</div>
 		<?php endif; ?>
@@ -76,11 +76,11 @@ include_once('common/sidebar.php');
 											<td><?= date('Y-m-d', strtotime($row['created_at'])) ?></td>
 											<td>
 												<div class="btn-group" role="group" aria-label="Basic example">
-													<?php if( $_SESSION['customer_superadmin'] || $update) : ?>
+													<?php if ($_SESSION['customer_superadmin'] || $update) : ?>
 														<a type="button" href="<?= base_url() . 'customer-edit-user/' . $row['id'] ?>" class="btn btn-outline-secondary">Edit</a>
 													<?php endif; ?>
-													<?php if( $_SESSION['customer_superadmin'] || $delete) : ?>
-														<button type="button" class="btn btn-danger">Delete</button>
+													<?php if ($_SESSION['customer_superadmin'] || $delete) : ?>
+														<button type="button" class="btn btn-danger del" data-deleteid='<?= $row['id'] ?>'>Delete</button>
 													<?php endif; ?>
 												</div>
 											</td>
@@ -105,3 +105,65 @@ include_once('common/footer.php');
 
 <script src="<?= base_url() ?>theme/assets/js/jquery.dataTables.min.js"></script>
 <script src="<?= base_url() ?>theme/assets/js/dataTables.bootstrap4.min.js"></script>
+
+<script>
+	$(".del").on("click", function() {
+		const id = $(this).data("deleteid")
+		Swal.fire({
+			title: "Are you sure?",
+			text: "You won't be able to revert this!",
+			icon: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#3085d6",
+			cancelButtonColor: "#d33",
+			confirmButtonText: "Yes, delete it!"
+		}).then((result) => {
+			if (result.isConfirmed) {
+				const id = $(this).data("deleteid")
+				console.log("id", id);
+				$.ajax({
+					url: "<?php echo base_url() . "customer-delete-user-submit"; ?>",
+					type: "post",
+					data: {
+						id: id
+					},
+					// processData: false, // tell jQuery not to process the data
+					// contentType: false, // tell jQuery not to set contentType
+					// cache: false,
+					beforeSend: function() {
+						$(".del").prop("disabled", true);
+					},
+					success: function(res) {
+						let obj = JSON.parse(res);
+						if (obj.error) {
+							$(".del").prop("disabled", false);
+							toastr.error("Please check errors list!", "Error");
+							$(window).scrollTop(0);
+						} else if (obj.success) {
+							Swal.fire({
+								title: "Deleted!",
+								text: "Your file has been deleted.",
+								icon: "success"
+							});
+							setTimeout(function() {
+								window.location = '<?php echo base_url() . 'customer-users' ?>';
+							}, 1000);
+						} else {
+							$(".del").prop("disabled", false);
+							toastr.error("Something bad happened!", "Error");
+							$(window).scrollTop(0);
+						}
+						$(".del").prop("disabled", false);
+					},
+					error: function(error) {
+						toastr.error("Error while sending request to server!", "Error");
+						$(window).scrollTop(0);
+						$(".del").prop("disabled", false);
+					}
+				})
+
+
+			}
+		});
+	})
+</script>

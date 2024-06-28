@@ -11,6 +11,9 @@
 
 <script src="<?= base_url() ?>theme/assets/js/script.js"></script>
 
+<script src="<?= base_url() ?>theme/assets/plugins/sweetalert/sweetalert2.all.min.js"></script>
+<script src="<?= base_url() ?>theme/assets/plugins/sweetalert/sweetalerts.min.js"></script>
+
 <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 <script>
