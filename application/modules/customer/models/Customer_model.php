@@ -21,21 +21,29 @@ class Customer_model extends CI_Model
         ->result_array());
     }
 
-        public function get_user($params){
-            $res = $this->db->select('users.*')
-            ->from('users')
-            ->where('users.id', $params)
-            ->get()
-            ->row_array();
-            $_SESSION['customer_modules'] = isset($res['modules']) ? json_decode($res['modules'], true) : [] ;
-            return $res;
-        }
+    public function get_user($params){
+        $res = $this->db->select('users.*')
+        ->from('users')
+        ->where('users.id', $params)
+        ->get()
+        ->row_array();
+        $_SESSION['customer_modules'] = isset($res['modules']) ? json_decode($res['modules'], true) : [] ;
+        return $res;
+    }
 
     public function get_all_users(){
         return ($this->db->select('users.*')
         ->from('users')
         ->get()
         ->result_array());
+    }
+
+    public function add_user_submit($params){
+        return ($this->db->insert('users', $params));
+    }
+
+    public function edit_user_submit($params){
+        return ($this->db->update('users', $params, $params['id']));
     }
     
 }

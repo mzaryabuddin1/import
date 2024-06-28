@@ -8,6 +8,8 @@ $filtered_modules = array_filter($_SESSION['customer_modules'], function($module
     return $module['module'] === 'users';
 });
 
+$filtered_modules = array_values($filtered_modules);
+
 
 $view = $filtered_modules[0]['view'];
 $insert = $filtered_modules[0]['insert'];
@@ -58,6 +60,7 @@ include_once('common/sidebar.php');
 										<th>Address</th>
 										<th>Phone</th>
 										<th>Status</th>
+										<th>Created</th>
 										<th>Action</th>
 									</tr>
 								</thead>
@@ -70,10 +73,11 @@ include_once('common/sidebar.php');
 											<td><?= $row['address'] ?></td>
 											<td><?= $row['phone'] ?></td>
 											<td><?= $row['status'] ? 'Active' : 'Inactive' ?></td>
+											<td><?= date('Y-m-d', strtotime($row['created_at'])) ?></td>
 											<td>
 												<div class="btn-group" role="group" aria-label="Basic example">
 													<?php if( $_SESSION['customer_superadmin'] || $update) : ?>
-														<a type="button" href="#" class="btn btn-outline-secondary">Edit</a>
+														<a type="button" href="<?= base_url() . 'customer-edit-user/' . $row['id'] ?>" class="btn btn-outline-secondary">Edit</a>
 													<?php endif; ?>
 													<?php if( $_SESSION['customer_superadmin'] || $delete) : ?>
 														<button type="button" class="btn btn-danger">Delete</button>
