@@ -53,5 +53,13 @@ class Customer_model extends CI_Model
         $this->db->where('id', $params['id']);
         return $this->db->update('users', $params);
     }
+
+    public function get_all_stock(){
+        return ($this->db->select('stock.*')
+        ->from('users')
+        ->where('is_delete', 0)
+        ->get()
+        ->result_array());
+    }
     
 }

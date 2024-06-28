@@ -20,6 +20,11 @@
 						<a href="<?= base_url() ?>customer-users" class="<?= $pagetab == 'users_accounts' ? 'active' : ''  ?>"><img src="<?= base_url() ?>theme/assets/img/icons/users1.svg" alt="img"><span> User Accounts</span> </a>
 					</li>
 				<?php endif ?>
+				<?php if ( $_SESSION['customer_superadmin'] || $result['stock']) : ?>
+					<li>
+						<a href="<?= base_url() ?>customer-stock" class="<?= $pagetab == 'stock' ? 'active' : ''  ?>"><img src="<?= base_url() ?>theme/assets/img/icons/product.svg" alt="img"><span> Stock</span> </a>
+					</li>
+				<?php endif ?>
 
 
 				<!-- <li class="submenu" >
