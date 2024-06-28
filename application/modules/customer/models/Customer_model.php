@@ -34,6 +34,7 @@ class Customer_model extends CI_Model
     public function get_all_users(){
         return ($this->db->select('users.*')
         ->from('users')
+        ->where('is_delete', 0)
         ->get()
         ->result_array());
     }
