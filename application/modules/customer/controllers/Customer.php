@@ -94,6 +94,147 @@ class Customer extends MX_Controller
 		$this->load->view('add_users_view', $this->data);
 	}
 
+	public function edit_user($id)
+	{
+		$this->checksession();
+		$isallowed = $this->module_auth('users', 'update');
+		if(!$isallowed)
+			header('Location: ' . base_url() . 'customer-welcome?err=You are not allowed to view');
+
+		$this->data['data'] = $this->Customer_model->get_user($id);
+
+		$this->load->view('edit_users_view', $this->data);
+	}
+
+	public function add_user_submit()
+	{
+		$this->checksession();
+		$isallowed = $this->module_auth('users', 'insert');
+		if(!$isallowed)
+			header('Location: ' . base_url() . 'customer-welcome?err=You are not allowed to view');
+
+		//VALIDATE FORM
+		$this->form_validation->set_rules('username', 'Username', 'required|trim|min_length[3]|is_unique[users.username]');
+		$this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[5]');
+		$this->form_validation->set_rules('permissions', 'Permission', 'required|trim');
+		$this->form_validation->set_rules('email', 'Email', 'trim|valid_email');
+		$this->form_validation->set_rules('phone', 'Phone', 'trim');
+		$this->form_validation->set_rules('address', 'Address', 'trim');
+
+		if ($this->form_validation->run() == false) {
+			$errors = array('error' => validation_errors());
+			print_r(json_encode($errors));
+			exit;
+		}
+
+		if(!empty($_FILES['file']['name'])){
+			// Set upload preferences
+			$config['upload_path'] = 'uploads/profile_pictures/'; // Path to upload the file
+			$config['allowed_types'] = 'jpg|jpeg|png|gif'; // Allowed file types
+			$config['max_size'] = '2048'; // Maximum file size (2MB)
+			$config['file_name'] = time() . '_' . $_FILES['file']['name']; // Rename the file to avoid conflicts
+			$this->upload->initialize($config);
+
+			if ($this->upload->do_upload('file')) {
+				// File upload successful
+				$upload_data = $this->upload->data();
+				$this->data['profile_picture'] = base_url() . 'uploads/profile_pictures/' . $upload_data['file_name'];
+			}
+		}
+
+		$information = $this->security->xss_clean($this->input->post());
+		$this->data['username'] = $information['username'];
+		$this->data['password'] = $information['password'];
+		$this->data['modules'] = $information['permissions'];
+		$this->data['email'] = $information['email'];
+		$this->data['phone'] = $information['phone'];
+		$this->data['address'] = $information['address'];
+		$this->data['package_id'] = 1;
+		$this->data['created_at'] = $this->__currentdatetime;
+		$this->data['created_by'] = $_SESSION['customer_id'];
+
+		$result = $this->Customer_model->add_user_submit($this->data);
+
+		if($result){
+			$success = array('success' => 1, 'msg' => "Inserted successfully");
+			print_r(json_encode($success));
+			exit;
+		}else{
+			$errors = array('error' => '<p>Error while inserting!.</p>');
+			print_r(json_encode($errors));
+			exit;
+		}
+
+
+		// $this->load->view('add_users_view', $this->data);
+	}
+
+	public function edit_user_submit()
+	{
+		$this->checksession();
+		$isallowed = $this->module_auth('users', 'update');
+		if(!$isallowed)
+			header('Location: ' . base_url() . 'customer-welcome?err=You are not allowed to view');
+
+		//VALIDATE FORM
+		$this->form_validation->set_rules('id', 'Id', 'required|numeric|min[1]');
+		if($this->input->post('password')){
+			$this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[5]');
+			$this->data['password'] = md5($this->input->post('password'));
+
+		}
+		$this->form_validation->set_rules('permissions', 'Permission', 'required|trim');
+		$this->form_validation->set_rules('email', 'Email', 'trim|valid_email');
+		$this->form_validation->set_rules('phone', 'Phone', 'trim');
+		$this->form_validation->set_rules('address', 'Address', 'trim');
+
+		if ($this->form_validation->run() == false) {
+			$errors = array('error' => validation_errors());
+			print_r(json_encode($errors));
+			exit;
+		}
+
+		if(!empty($_FILES['file']['name'])){
+			// Set upload preferences
+			$config['upload_path'] = 'uploads/profile_pictures/'; // Path to upload the file
+			$config['allowed_types'] = 'jpg|jpeg|png|gif'; // Allowed file types
+			$config['max_size'] = '2048'; // Maximum file size (2MB)
+			$config['file_name'] = time() . '_' . $_FILES['file']['name']; // Rename the file to avoid conflicts
+			$this->upload->initialize($config);
+
+			if ($this->upload->do_upload('file')) {
+				// File upload successful
+				$upload_data = $this->upload->data();
+				$this->data['profile_picture'] = base_url() . 'uploads/profile_pictures/' . $upload_data['file_name'];
+			}
+		}
+
+		$information = $this->security->xss_clean($this->input->post());
+		$this->data['id'] = $information['id'];
+		$this->data['modules'] = $information['permissions'];
+		$this->data['email'] = $information['email'];
+		$this->data['phone'] = $information['phone'];
+		$this->data['address'] = $information['address'];
+		$this->data['package_id'] = 1;
+		$this->data['updated_at'] = $this->__currentdatetime;
+		$this->data['updated_by'] = $_SESSION['customer_id'];
+
+		$result = $this->Customer_model->edit_user_submit($this->data);
+
+		if($result){
+			$success = array('success' => 1, 'msg' => "Updated successfully");
+			print_r(json_encode($success));
+			exit;
+		}else{
+			$errors = array('error' => '<p>Error while updating!.</p>');
+			print_r(json_encode($errors));
+			exit;
+		}
+
+
+		// $this->load->view('add_users_view', $this->data);
+	}
+
 	public function login_submit()
 	{
 		//VALIDATE FORM

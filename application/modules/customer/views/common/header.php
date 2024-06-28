@@ -8,7 +8,7 @@
 	<meta name="keywords" content="admin, estimates, bootstrap, business, corporate, creative, management, minimal, modern,  html5, responsive">
 	<meta name="author" content="Dreamguys - Bootstrap Admin Template">
 	<meta name="robots" content="noindex, nofollow">
-	<title>Dreams Pos admin template</title>
+	<title>Import</title>
 
 	<link rel="shortcut icon" type="image/x-icon" href="<?= base_url()?>theme/assets/img/favicon.png">
 	<link rel="stylesheet" href="<?= base_url()?>theme/assets/css/bootstrap.min.css">
@@ -17,6 +17,8 @@
 	<link rel="stylesheet" href="<?= base_url()?>theme/assets/plugins/fontawesome/css/fontawesome.min.css">
 	<link rel="stylesheet" href="<?= base_url()?>theme/assets/plugins/fontawesome/css/all.min.css">
 	<link rel="stylesheet" href="<?= base_url()?>theme/assets/css/style.css">
+
+	
 </head>
 
 <body>
