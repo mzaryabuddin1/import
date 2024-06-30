@@ -56,8 +56,14 @@ class Customer_model extends CI_Model
 
     public function get_all_stock(){
         return ($this->db->select('stock.*')
-        ->from('users')
-        ->where('is_delete', 0)
+        ->from('stock')
+        ->get()
+        ->result_array());
+    }
+
+    public function get_hscode(){
+        return ($this->db->select('HScodes.*')
+        ->from('HScodes')
         ->get()
         ->result_array());
     }

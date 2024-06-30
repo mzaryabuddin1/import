@@ -270,13 +270,25 @@ class Customer extends MX_Controller
 			header('Location: ' . base_url() . 'customer-welcome?err=You are not allowed to view');
 
 		$this->data['data'] = $this->Customer_model->get_all_stock();
-		$this->load->view('users_view', $this->data);
+		$this->load->view('stock_view', $this->data);
+	}
+
+	public function add_stock()
+	{
+		$this->checksession();
+		$isallowed = $this->module_auth('stock', 'insert');
+		if(!$isallowed)
+			header('Location: ' . base_url() . 'customer-welcome?err=You are not allowed to view');
+
+		$this->data['hscode'] = $this->Customer_model->get_hscode();
+
+		$this->load->view('add_stock_view', $this->data);
 	}
 
 	public function login_submit()
 	{
 		//VALIDATE FORM
-		$this->form_validation->set_rules('username', 'Username', 'required|trim|min_length[5]');
+		$this->form_validation->set_rules('username', 'Username', 'required|trim|min_length[3]');
 		$this->form_validation->set_rules('password', 'Password', 'required|trim|min_length[5]');
 
 		if ($this->form_validation->run() == false) {
